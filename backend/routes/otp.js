@@ -21,35 +21,45 @@ function generateOtp() {
 
 // Request OTP
 router.post('/request', async (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'Email required' });
-  const otp = generateOtp();
-  const hashedOtp = await bcrypt.hash(otp, 10);
-  const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60000);
-  await Otp.deleteMany({ email }); // Remove previous OTPs
-  await Otp.create({ email, hashedOtp, expiresAt });
-  // Send email
-  await transporter.sendMail({
-    from: process.env.GMAIL_USER,
-    to: email,
-    subject: 'Your OTP Code',
-    text: `Your OTP is: ${otp}. It expires in ${OTP_EXPIRY_MINUTES} minutes.`,
-  });
-  res.json({ message: 'OTP sent' });
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+    const otp = generateOtp();
+    const hashedOtp = await bcrypt.hash(otp, 10);
+    const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60000);
+    await Otp.deleteMany({ email }); // Remove previous OTPs
+    await Otp.create({ email, hashedOtp, expiresAt });
+    // Send email
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: 'Your OTP Code',
+      text: `Your OTP is: ${otp}. It expires in ${OTP_EXPIRY_MINUTES} minutes.`,
+    });
+    res.json({ message: 'OTP sent' });
+  } catch (err) {
+    console.error('OTP request error:', err);
+    res.status(500).json({ error: 'Failed to send OTP' });
+  }
 });
 
 // Verify OTP
 router.post('/verify', async (req, res) => {
-  const { email, otp } = req.body;
-  if (!email || !otp) return res.status(400).json({ error: 'Email and OTP required' });
-  const record = await Otp.findOne({ email, used: false });
-  if (!record) return res.status(400).json({ error: 'OTP not found or already used' });
-  if (record.expiresAt < new Date()) return res.status(400).json({ error: 'OTP expired' });
-  const match = await bcrypt.compare(otp, record.hashedOtp);
-  if (!match) return res.status(400).json({ error: 'Invalid OTP' });
-  record.used = true;
-  await record.save();
-  res.json({ message: 'OTP verified' });
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) return res.status(400).json({ error: 'Email and OTP required' });
+    const record = await Otp.findOne({ email, used: false });
+    if (!record) return res.status(400).json({ error: 'OTP not found or already used' });
+    if (record.expiresAt < new Date()) return res.status(400).json({ error: 'OTP expired' });
+    const match = await bcrypt.compare(otp, record.hashedOtp);
+    if (!match) return res.status(400).json({ error: 'Invalid OTP' });
+    record.used = true;
+    await record.save();
+    res.json({ message: 'OTP verified' });
+  } catch (err) {
+    console.error('OTP verify error:', err);
+    res.status(500).json({ error: 'OTP verification failed' });
+  }
 });
 
 module.exports = router; 

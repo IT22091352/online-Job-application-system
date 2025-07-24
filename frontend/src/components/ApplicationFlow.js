@@ -39,9 +39,15 @@ export default function ApplicationFlow({ email }) {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
 
   useEffect(() => {
-    api.get('/advertisements').then(res => {
-      setAd(res.data[0]);
-    });
+    const fetchAd = async () => {
+      try {
+        const res = await api.get('/advertisements');
+        setAd(res.data[0]);
+      } catch (err) {
+        setError('Failed to load advertisements');
+      }
+    };
+    fetchAd();
   }, []);
 
   const onSubmit = async (data) => {
