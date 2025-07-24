@@ -1,0 +1,128 @@
+body {
+  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navbar shadow */
+.MuiAppBar-root {
+  box-shadow: 0 2px 16px rgba(0, 64, 128, 0.08);
+  background: #004080;
+}
+
+.modern-card {
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(60, 72, 88, 0.12);
+  padding: 2.5rem 2rem;
+  max-width: 480px;
+  margin: 2rem auto;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.modern-card:hover {
+  box-shadow: 0 8px 32px rgba(60, 72, 88, 0.18);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.MuiTypography-h5 {
+  font-weight: 700;
+  color: #004080;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.MuiTextField-root {
+  margin-bottom: 1.2rem !important;
+}
+
+.MuiInputBase-root input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #00808033;
+  border-color: #008080;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.MuiButton-contained {
+  background: linear-gradient(90deg, #004080 0%, #008080 100%);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 0;
+  box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.MuiButton-contained:hover {
+  background: linear-gradient(90deg, #003366 0%, #006666 100%);
+  box-shadow: 0 4px 16px rgba(0, 64, 128, 0.10);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.MuiButton-contained:disabled {
+  background: #e0e0e0 !important;
+  color: #888 !important;
+  cursor: not-allowed;
+}
+
+.MuiAlert-root {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.MuiSelect-root, .MuiInputBase-root {
+}
+
+/* Custom bullet styles for lists */
+ul, ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.2em;
+}
+ul li {
+  position: relative;
+  margin-bottom: 0.5em;
+  padding-left: 1.2em;
+  list-style: none;
+}
+ul li:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 0.5em;
+  height: 0.5em;
+  background: #008080;
+  display: inline-block;
+  }
+
+/* Footer styles */
+.footer {
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 0.95rem;
+  padding: 1.5rem 0 0.5rem 0;
+  margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+  .modern-card, .MuiPaper-root {
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modern-card, .MuiPaper-root {
+    padding: 0.7rem 0.2rem;
+    margin: 1rem auto;
+  }
+  .MuiTypography-h5 {
+    font-size: 1.1rem;
+  }
+}
